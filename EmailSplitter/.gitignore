@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 *.iml
 .gradle
 /local.properties
@@ -14,12 +13,3 @@
 .externalNativeBuild
 .cxx
 local.properties
-=======
-﻿*.iml
-.gradle/
-/local.properties
-build/
-.idea/caches
-.idea/workspace.xml
-.DS_Store
->>>>>>> 1bb3ad5ddc36bfa27d7c007b3f1795c06ccb1f56
