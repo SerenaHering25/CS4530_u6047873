@@ -1,9 +1,25 @@
-*.iml
-.gradle/
-local.properties
+# Android Studio / IntelliJ
 .idea/
-.DS_Store
+*.iml
+
+# Gradle
+.gradle/
 build/
-captures/
+**/build/
+
+# Local machine configuration
+local.properties
+
+# Native build files
 .externalNativeBuild/
 .cxx/
+
+# OS files
+.DS_Store
+desktop.ini
+
+# Generated / temporary files
+captures/
+
+# Archives
+*.zip
