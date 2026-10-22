@@ -2,11 +2,11 @@ package com.example.courseviewereditor
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
-import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.graphics.Color
+import androidx.compose.runtime.Composable
 
+// shows all fields of the selected course.
 @Composable
 fun CourseDetailScreen(
     course: Course,
@@ -26,19 +26,19 @@ fun CourseDetailScreen(
         Spacer(Modifier.height(24.dp))
 
         Row {
-            // back button navigation
+            // Navigates back without changing any data.
             Button(onClick = onBackClick) {
                 Text("Back")
             }
-            // delete button
             Spacer(Modifier.width(8.dp))
+
+            // Deletes the course, then navigates back.
             Button(
                 onClick = {
                     viewModel.removeCourse(course)
                     onBackClick()
                 },
-                // red for delete button
-                colors = ButtonDefaults.buttonColors(containerColor = Color.Red)
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
             ) {
                 Text("Delete")
             }

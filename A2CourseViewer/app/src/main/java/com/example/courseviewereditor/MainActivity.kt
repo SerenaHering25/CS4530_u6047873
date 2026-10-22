@@ -13,6 +13,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import androidx.compose.ui.platform.LocalContext
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,11 +34,14 @@ fun CourseApp() {
     // tracks which screen is currently shown
     val navController = rememberNavController()
     // created once and passed down to both screens
-    val viewModel: CourseViewModel = viewModel()
+    val context = LocalContext.current
+    val viewModel: CourseViewModel = viewModel(
+        factory = CourseViewModelFactory(context.applicationContext)
+    )
 
     // defines the screens for the app
     NavHost(navController = navController, startDestination = "courseList") {
-        // route for main screen
+        // add course form and LazyColumn of courses
         composable("courseList") {
             CourseListScreen(
                 viewModel = viewModel,
@@ -45,7 +50,7 @@ fun CourseApp() {
                 }
             )
         }
-        // route for detail screen
+        // details screen, course id is passed in the route and looked up.
         composable(
             route = "courseDetail/{courseId}",
             arguments = listOf(navArgument("courseId") { type = NavType.IntType })

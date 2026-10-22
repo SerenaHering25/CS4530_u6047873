@@ -1,22 +1,34 @@
 package com.example.courseviewereditor
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
-class CourseViewModel : ViewModel() {
+// Now takes the repository as a constructor parameter instead of owning the data.
+// talks only to repo never to Room.
+class CourseViewModel(private val repository: CourseRepository) : ViewModel() {
 
-    private var nextId = 1 // counter for unique id for each course
-
-    // keeps private so nothing outside this class can change the UI state
+    // only this class can change the state
     private val _uiState = MutableStateFlow(CourseUiState())
 
-    // Composables get the current state and are notified of changes automatically
+    // observed so screens know what to display
     val uiState: StateFlow<CourseUiState> = _uiState.asStateFlow()
 
-    // Updates on field of the "add course" form
+    init {
+        // Keeps uiState.courses in sync with the database. Any insert or delete
+        // in Room updates automatically.
+        viewModelScope.launch {
+            repository.courses.collect { list ->
+                _uiState.update { it.copy(courses = list) }
+            }
+        }
+    }
+
+    // Update a part of the form field that user types in
     fun onDepartmentChange(value: String) {
         _uiState.update { it.copy(department = value) }
     }
@@ -29,38 +41,32 @@ class CourseViewModel : ViewModel() {
         _uiState.update { it.copy(location = value) }
     }
 
-    // save new course
+    // Called when the user taps "Add"
     fun saveCourse() {
         val state = _uiState.value
-        // if any field blank do nothing and exit early
         if (state.department.isBlank() || state.courseNumber.isBlank() || state.location.isBlank()) {
             return
         }
 
-        _uiState.update { current ->
-            current.copy(
-                // add a new course to existing list
-                courses = current.courses + Course(
-                    id = nextId++,
-                    department = current.department,
-                    courseNumber = current.courseNumber,
-                    location = current.location
-                ),
-                // clear the form after course has been saved
-                department = "",
-                courseNumber = "",
-                location = ""
+        // Database calls are suspend functions, so they run in a coroutine so UI doesn't freeze.
+        viewModelScope.launch {
+            repository.addCourse(
+                Course(
+                    department = state.department,
+                    courseNumber = state.courseNumber,
+                    location = state.location
+                )
             )
         }
+
+        // Clear the form fields.
+        _uiState.update { it.copy(department = "", courseNumber = "", location = "") }
     }
 
-    // delete existing course
     fun removeCourse(course: Course) {
-        // rebuild course list with deleted course subtracted
-        _uiState.update { it.copy(courses = it.courses - course) }
+        viewModelScope.launch { repository.deleteCourse(course) }
     }
 
-    // Used by the detail screen to look up the clicked course by id
     fun getCourseById(id: Int): Course? {
         return _uiState.value.courses.find { it.id == id }
     }
