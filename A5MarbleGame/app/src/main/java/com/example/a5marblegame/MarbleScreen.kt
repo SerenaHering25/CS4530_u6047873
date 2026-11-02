@@ -48,7 +48,7 @@ fun MarbleScreen(viewModel: MarbleViewModel, sensorLabel: String) {
             color = MaterialTheme.colorScheme.onBackground
         )
 
-        // The marble. offset comes before size/background.
+        // The marble, offset comes before size/background.
         Box(
             modifier = Modifier
                 .offset(state.x.dp, state.y.dp)

@@ -57,11 +57,8 @@ class MarbleViewModel : ViewModel() {
         if (maxX <= 0f || maxY <= 0f) return   // screen size not known yet
 
         // velocity += dt * scale * gravity
-        //  - Sensor x: tilting the right edge down makes gravityX negative, but the marble
-        //    should roll right (+x on screen), so the x scale is negative.
-        //  - Sensor y points up the screen, offset y points down. Tilting the top edge
-        //    down makes gravityY negative and the marble should roll up (−y on screen),
-        //    so the y scale is positive.
+        //  - Sensor x tilting the right edge down makes gravityX negative
+        //  - Sensor y points up the screen, offset y points down
         velocityX += dt * -ACCEL_SCALE * gravityX
         velocityY += dt * ACCEL_SCALE * gravityY
 
@@ -74,7 +71,7 @@ class MarbleViewModel : ViewModel() {
         var x = _state.value.x + dt * velocityX
         var y = _state.value.y + dt * velocityY
 
-        // Keep the marble on screen; bounce softly off the walls
+        // Keep the marble on screen and bounce off the walls
         if (x < 0f) {
             x = 0f; velocityX = -velocityX * BOUNCE
         } else if (x > maxX) {
