@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "326478982867",
+    "project_id": "authdemo-ed73d",
+    "storage_bucket": "authdemo-ed73d.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:326478982867:android:4c0cd164f0e2c809af2e26",
+        "android_client_info": {
+          "package_name": "com.example.googleauthdemov2"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAn-z_wj75wcKjPsjkg3snSojJgQ5u_WoA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
