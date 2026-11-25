@@ -23,3 +23,5 @@ captures/
 
 # Archives
 *.zip
+# Firebase config (contains API key)
+google-services.json
